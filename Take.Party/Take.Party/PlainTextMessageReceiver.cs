@@ -5,6 +5,9 @@ using Lime.Protocol;
 using Takenet.MessagingHub.Client;
 using Takenet.MessagingHub.Client.Listener;
 using Takenet.MessagingHub.Client.Sender;
+using SpotifyAPI.Web.Models;
+using SpotifyAPI.Web.Enums;
+using System.Linq;
 
 namespace Take.Party
 {
@@ -19,8 +22,16 @@ namespace Take.Party
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)
         {
+            var _spotify = new SpotifyAPI.Web.SpotifyWebAPI();
+            _spotify.AccessToken = "";
+            var item = _spotify.SearchItems(message.Content.ToString(), SearchType.Track);
+            var tracks = "Não achou";
+            if (item.Tracks != null)
+            {
+                tracks = string.Join("\n", item.Tracks?.Items.Select(i => i.Name));
+            }
             Console.WriteLine($"From: {message.From} \tContent: {message.Content}");
-            await _sender.SendMessageAsync("Pong!", message.From, cancellationToken);
+            await _sender.SendMessageAsync(tracks, message.From, cancellationToken);
         }
     }
 }
