@@ -10,6 +10,7 @@ using Takenet.MessagingHub.Client.Sender;
 using SpotifyAPI.Web.Models;
 using Lime.Messaging.Contents;
 using Takenet.MessagingHub.Client;
+using MoreLinq;
 
 namespace Take.Party.Receivers
 {
@@ -35,15 +36,17 @@ namespace Take.Party.Receivers
 
             var selectOptions = new List<SelectOption>();
 
-            var count = item.Tracks.Items.Count > 5 ? 5 : item.Tracks.Items.Count;
+            var tracks = item.Tracks.Items.DistinctBy(x => $"{x.Name} {x.Artists.First().Name}").ToList();
+
+            var count = tracks.Count > 5 ? 5 : tracks.Count;
 
             for (int i = 0; i < count; i++)
             {
                 selectOptions.Add( new SelectOption
                 {
-                    Text = $"{item.Tracks.Items[i].Name} {item.Tracks.Items[i].Artists.First().Name}",
+                    Text = $"{tracks[i].Name} {tracks[i].Artists.First().Name}",
                     Order = i + 1,
-                    Value = new PlainText { Text = item.Tracks.Items[i].Uri }
+                    Value = new PlainText { Text = tracks[i].Uri }
                 });
             }
 

@@ -33,7 +33,7 @@ namespace Take.Party
             {
                 await _sender.SendMessageAsync(new PlainText
                 {
-                    Text = "Bem vindo, digite o nome da música, artista ou album."
+                    Text = "Olá! Seja bem-vindo ao Take.Party! Vamos ouvir sua música? Digite o nome do artista, álbum ou música que quer tocar no Spotify:"
                 }, message.From, cancellationToken);
                 return;
             }
@@ -45,7 +45,7 @@ namespace Take.Party
                 {
                     await _sender.SendMessageAsync(new PlainText
                     {
-                        Text = "Vc pediu uma música recentemente, de uma chance para os outros e tente novamente em alguns minutos."
+                        Text = "Você acabou de pedir uma música! Dê uma chance aos outros… mas se eles não quiserem, volte em alguns minutos!"
                     }, message.From, cancellationToken);
                     return;
                 }
