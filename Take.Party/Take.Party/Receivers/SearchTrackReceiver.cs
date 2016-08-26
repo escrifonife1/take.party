@@ -32,15 +32,14 @@ namespace Take.Party
             {
                 //EXEMPLO ESTA AQUI http://johnnycrazy.github.io/SpotifyAPI-NET/SpotifyWebAPI/auth/
                 //var _spotify = await GetToken(); //ESSA LINHA É SO PARA PEGAR O TOKEN. DEPOIS DISSO PODE SER COMENTADA
-
-
+             
                 var item = _spotify.SearchItems(message.Content.ToString(), SearchType.Track);
                 var tracks = "Não achou";
                 if (item.Tracks != null)
                 {
                     //tracks = string.Join("\n", item.Tracks?.Items?.Select(i => $"{i?.Name} {i.Artists.First()?.Name}"));
                     //await ShowMediaLinkOptionsAsync(message.From, cancellationToken, item?.Tracks?.Items?.Select(i => new string[][] { $"{i?.Name} {i.Artists?.First()?.Name}", i.Uri }).ToArray());
-                    //StateManager.Instance.SetState(message.From, nameof(AddTrackToListReceiver));
+                    StateManager.Instance.SetState(message.From, nameof(AddTrackToListReceiver));
                     await ShowMediaLinkOptionsAsync(message.From, cancellationToken, item?.Tracks);
                     
                 }
@@ -79,7 +78,7 @@ namespace Take.Party
             {
                 selectOptions[i] = new SelectOption
                 {
-                    Text = $"{song.Name} {song.Artists.First()}",
+                    Text = $"{song.Name} {song.Artists.First().Name}",
                     Order = i + 1,
                     Value = new PlainText { Text = song.Uri }
                 };

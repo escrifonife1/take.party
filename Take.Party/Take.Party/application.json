@@ -6,11 +6,12 @@
       "type": "SearchTrackReceiver",
       "mediaType": "text/plain",
       "state": "default"
+    },
+    {
+      "type": "AddTrackToListReceiver",
+      "mediaType": "text/plain",
+      "state": "AddTrackToListReceiver"
     }
-    //{
-    //  "type": "AddTrackToListReceiver",
-    //  "mediaType": "text/plain"
-    //}
   ],
   "settings": {
     "setting1": "value1"

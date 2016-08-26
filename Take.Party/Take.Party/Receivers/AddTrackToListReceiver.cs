@@ -31,8 +31,8 @@ namespace Take.Party
         {
             //var playlist =  _spotify.GetUserPlaylists(_profile.Id);
             await _sender.SendMessageAsync("Sua musica foi adicionada", message.From, cancellationToken);
-            //StateManager.Instance.SetState(message.From, nameof(SearchTrackReceiver));
-            //await _spotify.AddPlaylistTrackAsync(_profile.Id, "5bQ5OtlOIx9ADm4BtWJ6yx", "spotify:user:take.party");
+            StateManager.Instance.SetState(message.From, "default");
+            await _spotify.AddPlaylistTrackAsync(_profile.Id, "5bQ5OtlOIx9ADm4BtWJ6yx", message.Content.ToString());
         }
     }
 }
