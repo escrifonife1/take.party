@@ -18,22 +18,21 @@ namespace Take.Party
     {
         private readonly IMessagingHubSender _sender;
 
-        public SelectAlbumReceiver(IMessagingHubSender sender)
+        public SelectAlbumReceiver(IMessagingHubSender sender, Settings settings)
+            : base(settings)
         {
             this._sender = sender;
         }
 
         public async Task ReceiveAsync(Message envelope, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var item = Cache.Get(envelope.From.ToString()) as SearchItem;
-
-            var id = envelope.Content.ToString().Split(' ')[1];
+            var id = envelope.Content.ToString();
 
             var tracks = await _spotify.GetAlbumTracksAsync(id);
 
             var select = new Select
             {
-                Text = "Escolha o album:"
+                Text = "Escolha a música que deseja adicionar à playlist:"
             };
 
             var selectOptions = new List<SelectOption>();
@@ -46,7 +45,7 @@ namespace Take.Party
                 {
                     Text = $"{tracks.Items[i].Name} {tracks.Items[i].Artists.First().Name}",
                     Order = i + 1,
-                    Value = new PlainText { Text = $"track {tracks.Items[i].Id}" }
+                    Value = new PlainText { Text = $"{tracks.Items[i].Uri}" }
                 });
             }
 

@@ -1,24 +1,24 @@
-﻿using System;
+﻿using Lime.Messaging.Contents;
+using Lime.Protocol;
+using SpotifyAPI.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Lime.Protocol;
 using Take.Party.Receivers;
+using Takenet.MessagingHub.Client;
 using Takenet.MessagingHub.Client.Listener;
 using Takenet.MessagingHub.Client.Sender;
-using SpotifyAPI.Web.Models;
-using Lime.Messaging.Contents;
-using Takenet.MessagingHub.Client;
 
 namespace Take.Party
 {
-    public class AlbumReceiver : BaseReceiver, IMessageReceiver
+    public class SelectArtistReceiver : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
 
-        public AlbumReceiver(IMessagingHubSender sender, Settings settings)
+        public SelectArtistReceiver(IMessagingHubSender sender, Settings settings)
             : base(settings)
         {
             this._sender = sender;
@@ -26,22 +26,25 @@ namespace Take.Party
 
         public async Task ReceiveAsync(Message envelope, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var item = Cache.Get(envelope.From.ToString()) as SearchItem;
+            var id = envelope.Content.ToString();
+
+            var tracks = await _spotify.GetArtistsTopTracksAsync(id, "BR");
+
             var select = new Select
             {
-                Text = "Escolha o album:"
+                Text = "Escolha a música que deseja adicionar à playlist:"
             };
 
             var selectOptions = new List<SelectOption>();
 
-            var count = item.Albums.Items.Count > 5 ? 5 : item.Albums.Items.Count;
+            var count = tracks.Tracks.Count > 5 ? 5 : tracks.Tracks.Count;
             for (int i = 0; i < count; i++)
             {
                 selectOptions.Add(new SelectOption
                 {
-                    Text = $"{item.Albums.Items[i].Name} {item.Albums.Items[i].Type}",
+                    Text = $"{tracks.Tracks[i].Name}",
                     Order = i + 1,
-                    Value = new PlainText { Text = $"{item.Albums.Items[i].Id}" }
+                    Value = new PlainText { Text = $"{tracks.Tracks[i].Uri}" }
                 });
             }
 

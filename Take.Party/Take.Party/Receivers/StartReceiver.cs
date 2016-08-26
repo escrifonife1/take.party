@@ -21,18 +21,36 @@ namespace Take.Party
     {
         private readonly IMessagingHubSender _sender;
 
-        public StartReceiver(IMessagingHubSender sender)
+        public StartReceiver(IMessagingHubSender sender, Settings settings)
+            : base(settings)
         {
             _sender = sender;
         }
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)
         {
+            if (message.Content.ToString() == "/start")
+            {
+                await _sender.SendMessageAsync(new PlainText
+                {
+                    Text = "Bem vindo, digite o nome da música, artista ou album."
+                }, message.From, cancellationToken);
+                return;
+            }
+
             try
             {
-                //EXEMPLO ESTA AQUI http://johnnycrazy.github.io/SpotifyAPI-NET/SpotifyWebAPI/auth/
-                //var _spotify = await GetToken(); //ESSA LINHA É SO PARA PEGAR O TOKEN. DEPOIS DISSO PODE SER COMENTADA
+                var lockCheck = Cache.Get($"{message.From}-lock");
+                if (lockCheck != null)
+                {
+                    await _sender.SendMessageAsync(new PlainText
+                    {
+                        Text = "Vc pediu uma música recentemente, de uma chance para os outros e tente novamente em alguns minutos."
+                    }, message.From, cancellationToken);
+                    return;
+                }
 
+                StateManager.Instance.SetState(message.From.ToNode(), "select-type");
                 var item = _spotify.SearchItems(message.Content.ToString(), SearchType.Track | SearchType.Artist | SearchType.Album);
 
                 if (item != null)
@@ -44,7 +62,7 @@ namespace Take.Party
 
                     if (item.Tracks?.Total > 0)
                     {
-                        selectOptions.Add( new SelectOption
+                        selectOptions.Add(new SelectOption
                         {
                             Text = $"Músicas",
                             Order = 0,
@@ -74,7 +92,7 @@ namespace Take.Party
 
                     var select = new Select
                     {
-                        Text = "Escolha o tipo que deseja receber:",
+                        Text = "Escolha o tipo que deseja procurar:",
                         Options = selectOptions.ToArray()
                     };
 
@@ -88,35 +106,6 @@ namespace Take.Party
                 Console.WriteLine(ex.ToString());
                 await _sender.SendMessageAsync("Deu erro... tente de novo", message.From, cancellationToken);
             }
-        }
-
-        private async Task ShowMenuOptionsAsync()
-        {
-
-        }
-
-       
-
-        private async Task<SpotifyWebAPI> GetToken()
-        {
-            WebAPIFactory webApiFactory = new WebAPIFactory(
-                   "http://localhost",
-                   8000,
-                   "4ba8934628a54571b57ed84de51d1825",
-                   Scope.UserReadPrivate,
-                   TimeSpan.FromSeconds(20)
-              );
-            SpotifyWebAPI _spotify = null;
-            try
-            {                
-                _spotify = await webApiFactory.GetWebApi();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
-            return _spotify;
         }
     }
 }

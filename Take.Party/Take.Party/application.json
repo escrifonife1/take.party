@@ -5,14 +5,21 @@
     {
       "type": "StartReceiver",
       "mediaType": "text/plain",
-      "state": "default",
-      "outstate": "select-type"
+      "state": "default"
     },
     {
       "type": "TrackReceiver",
       "mediaType": "text/plain",
       "state": "select-type",
-      "content": "0"
+      "content": "0",
+      "outstate": "add-track"
+    },
+    {
+      "type": "ArtistReceiver",
+      "mediaType": "text/plain",
+      "state": "select-type",
+      "content": "2",
+      "outstate": "select-artist"
     },
     {
       "type": "AlbumReceiver",
@@ -22,25 +29,33 @@
       "outstate": "select-album"
     },
     {
-      "type": "SelectAlbumReceiver",
+      "type": "SelectArtistReceiver",
       "mediaType": "text/plain",
-      "state": "select-album"
+      "state": "select-artist",
+      "outstate": "add-track"
     },
     {
-      "type": "ArtistReceiver",
+      "type": "SelectAlbumReceiver",
       "mediaType": "text/plain",
-      "state": "select-type",
-      "content": "2"
+      "state": "select-album",
+      "outstate": "add-track"
     },
     {
       "type": "AddTrackToListReceiver",
       "mediaType": "text/plain",
-      "state": "AddTrackToListReceiver"
+      "state": "add-track",
+      "outstate": "default"
     }
   ],
   "settings": {
-    "setting1": "value1"
+    "accessToken": "Yd5EgoCbPi8-3zm3oNDBWZMBpuFkaMnXffy6kDX6mjws0CYp0LvznJ3k5b9kCIqVIGyur2Cva0qLxTsD4V8mBv6JVvSeSN0UqsLcpMV-XjfnEkb_NNJ4mThneeI14ePgDp-cQj9lcSCx7LihKtJRSTxE7fRIXtRvOUQDLLzOwYx99QYhCK30Z1l4acvtOaVtHZgjbCapg1DQgVMAIo7uM0DYMCjjPHVyA-8z1WHg-5wuq0jpku6cofxOXdWD4uco8KO9Q1dv0mumMP0A5",
+    "refreshToken": "AQDL0oFRUCtflS8PHs1EerP6nazbD6tTGAYHXObIEX4vYaa01a4itRUWYBUOKwlfYfroZgm2W_Tki3w2sfFUqDIaeTwn6kXteWdot7njrv1j4li8zZcNvIhdb0X1x6G4Vco",
+    "clientSecret": "94486431428d4c0b95ea40897c73b13f",
+    "clientId": "4ba8934628a54571b57ed84de51d1825",
+    "playListId": "5bQ5OtlOIx9ADm4BtWJ6yx",
+    "timeout": 2
   },
   "startupType": "Startup",
+  "settingsType": "Settings",
   "schemaVersion": 2
 }

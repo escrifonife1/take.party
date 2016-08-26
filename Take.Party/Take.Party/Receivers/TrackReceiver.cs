@@ -17,7 +17,8 @@ namespace Take.Party.Receivers
     {
         private IMessagingHubSender _sender;
 
-        public TrackReceiver(IMessagingHubSender sender)
+        public TrackReceiver(IMessagingHubSender sender, Settings settings)
+            : base(settings)
         {
             _sender = sender;
             

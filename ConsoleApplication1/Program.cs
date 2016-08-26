@@ -76,7 +76,8 @@ namespace ConsoleApplication1
             //NEVER DO THIS! You would need to provide the ClientSecret.
             //You would need to do it e.g via a PHP-Script.
             Token token = auth.ExchangeAuthCode(response.Code, "94486431428d4c0b95ea40897c73b13f");
-            Console.WriteLine(token.AccessToken);
+            Console.WriteLine($"{token.AccessToken}");
+            Console.WriteLine($"{token.RefreshToken}");
             Console.ReadKey();
             //var spotify = new SpotifyWebApiClass()
             //{

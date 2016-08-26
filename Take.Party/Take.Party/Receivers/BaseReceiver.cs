@@ -1,4 +1,5 @@
 ﻿using SpotifyAPI.Web;
+using SpotifyAPI.Web.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,32 @@ namespace Take.Party.Receivers
     {
         public static MemoryCache Cache = new MemoryCache("bot");
         protected SpotifyWebAPI _spotify;
-
-        protected BaseReceiver()
+        protected Settings _settings;
+        protected BaseReceiver(Settings settings)
         {
+            _settings = settings;
             _spotify = new SpotifyWebAPI()
             {
-                AccessToken = "BQDG1eUfCR1-jzy7UZHxo11jyr4oIQODS_I4w6FOmFPwoOoQactxQnzFn56DB6w-ItBMcDASZ3liZobgMXwCl_XKMZ1XsaIb26Yb0-Ll6HHbfgKCwnd9F8q9IHPcm8jyBw8D7J_D9EovCMDHPT9nmW8A6UGjhxl0HLaQvj_IBVUy7VRPu04x2gMxXZu7AHL79MAmR8eGGqFmdvcUyOSAG0b_FdXmGrSmKosVuEbiTAnSp5CzPQoeZeRd-oBiUUNTtTHiO_eAhMJdC4KbcveYfuKo4_qUi1zGrfk",
+                AccessToken = settings.AccessToken,
                 TokenType = "Bearer"
             };
+
+            var profile = _spotify.GetPrivateProfile();
+
+            if (profile.Error != null)
+            {
+                var auth = new SpotifyAPI.Web.Auth.AutorizationCodeAuth()
+                {
+                    ClientId = settings.ClientId,
+                    Scope = Scope.UserReadPrivate | Scope.PlaylistModifyPublic | Scope.PlaylistModifyPrivate,
+                    RedirectUri = "http://localhost:8000"
+                };
+
+                var token = auth.RefreshToken(settings.RefreshToken, settings.ClientSecret);
+
+                settings.AccessToken = token.AccessToken;
+                _spotify.AccessToken = token.AccessToken;
+            }
         }
     }
 }

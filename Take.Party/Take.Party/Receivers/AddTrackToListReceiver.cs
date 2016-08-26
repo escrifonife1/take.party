@@ -19,7 +19,8 @@ namespace Take.Party
         private PrivateProfile _profile;
         private readonly IMessagingHubSender _sender;
 
-        public AddTrackToListReceiver(IMessagingHubSender sender)
+        public AddTrackToListReceiver(IMessagingHubSender sender, Settings settings)
+            : base(settings)
         {
             _sender = sender;
             _profile = _spotify.GetPrivateProfile();
@@ -27,10 +28,11 @@ namespace Take.Party
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)
         {
-            //var playlist =  _spotify.GetUserPlaylists(_profile.Id);
-            await _sender.SendMessageAsync("Sua musica foi adicionada", message.From, cancellationToken);
-            StateManager.Instance.SetState(message.From, "default");
-            await _spotify.AddPlaylistTrackAsync(_profile.Id, "5bQ5OtlOIx9ADm4BtWJ6yx", message.Content.ToString());
+            Cache.Remove(message.From.ToString());
+
+            await _spotify.AddPlaylistTrackAsync(_profile.Id, _settings.PlayListId, message.Content.ToString());
+            Cache.Add($"{message.From}-lock", true, DateTime.Now.AddMinutes(_settings.Timeout));
+            await _sender.SendMessageAsync("Sua musica foi adicionada a playlist.", message.From, cancellationToken);
         }
     }
 }
