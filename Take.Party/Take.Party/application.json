@@ -4,47 +4,37 @@
   "messageReceivers": [
     {
       "type": "StartReceiver",
-      "mediaType": "text/plain",
-      "state": "default"
+      "mediaType": "text/plain"
     },
     {
       "type": "TrackReceiver",
       "mediaType": "text/plain",
-      "state": "select-type",
-      "content": "0",
-      "outstate": "add-track"
+      "content": "^musica$"
     },
     {
       "type": "ArtistReceiver",
       "mediaType": "text/plain",
-      "state": "select-type",
-      "content": "2",
-      "outstate": "select-artist"
+      "content": "^artista$"
     },
     {
       "type": "AlbumReceiver",
       "mediaType": "text/plain",
-      "state": "select-type",
-      "content": "1",
-      "outstate": "select-album"
+      "content": "^album$"
     },
     {
       "type": "SelectArtistReceiver",
       "mediaType": "text/plain",
-      "state": "select-artist",
-      "outstate": "add-track"
+      "content": "^artista.*"
     },
     {
       "type": "SelectAlbumReceiver",
       "mediaType": "text/plain",
-      "state": "select-album",
-      "outstate": "add-track"
+      "content": "^album.*"
     },
     {
       "type": "AddTrackToListReceiver",
       "mediaType": "text/plain",
-      "state": "add-track",
-      "outstate": "default"
+      "content": "^track.*"
     }
   ],
   "settings": {

@@ -41,7 +41,7 @@ namespace Take.Party
                 {
                     Text = $"{item.Artists.Items[i].Name}",
                     Order = i + 1,
-                    Value = new PlainText { Text = $"{item.Artists.Items[i].Id}" }
+                    Value = new PlainText { Text = $"artista {item.Artists.Items[i].Id}" }
                 });
             }
 

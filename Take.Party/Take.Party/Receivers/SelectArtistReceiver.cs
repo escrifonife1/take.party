@@ -26,7 +26,7 @@ namespace Take.Party
 
         public async Task ReceiveAsync(Message envelope, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var id = envelope.Content.ToString();
+            var id = envelope.Content.ToString().Split(' ')[1];
 
             var tracks = await _spotify.GetArtistsTopTracksAsync(id, "BR");
 
@@ -44,7 +44,7 @@ namespace Take.Party
                 {
                     Text = $"{tracks.Tracks[i].Name}",
                     Order = i + 1,
-                    Value = new PlainText { Text = $"{tracks.Tracks[i].Uri}" }
+                    Value = new PlainText { Text = $"track {tracks.Tracks[i].Uri}" }
                 });
             }
 

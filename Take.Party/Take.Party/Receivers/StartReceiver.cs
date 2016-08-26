@@ -66,7 +66,7 @@ namespace Take.Party
                         {
                             Text = $"Músicas",
                             Order = 0,
-                            Value = new PlainText { Text = "0" }
+                            Value = new PlainText { Text = "musica" }
                         });
                     }
 
@@ -76,7 +76,7 @@ namespace Take.Party
                         {
                             Text = $"Albums",
                             Order = 1,
-                            Value = new PlainText { Text = "1" }
+                            Value = new PlainText { Text = "album" }
                         });
                     }
 
@@ -86,7 +86,7 @@ namespace Take.Party
                         {
                             Text = $"Artistas",
                             Order = 2,
-                            Value = new PlainText { Text = "2" }
+                            Value = new PlainText { Text = "artista" }
                         });
                     }
 

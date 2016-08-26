@@ -28,9 +28,10 @@ namespace Take.Party
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)
         {
+            var id = message.Content.ToString().Split(' ')[1];
             Cache.Remove(message.From.ToString());
 
-            await _spotify.AddPlaylistTrackAsync(_profile.Id, _settings.PlayListId, message.Content.ToString());
+            await _spotify.AddPlaylistTrackAsync(_profile.Id, _settings.PlayListId, id);
             Cache.Add($"{message.From}-lock", true, DateTime.Now.AddMinutes(_settings.Timeout));
             await _sender.SendMessageAsync("Sua musica foi adicionada a playlist.", message.From, cancellationToken);
         }

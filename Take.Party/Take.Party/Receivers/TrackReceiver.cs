@@ -46,7 +46,7 @@ namespace Take.Party.Receivers
                 {
                     Text = $"{tracks[i].Name} {tracks[i].Artists.First().Name}",
                     Order = i + 1,
-                    Value = new PlainText { Text = tracks[i].Uri }
+                    Value = new PlainText { Text = $"track {tracks[i].Uri}" }
                 });
             }
 
