@@ -10,6 +10,7 @@ using SpotifyAPI.Web.Enums;
 using System.Linq;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web;
+using Lime.Messaging.Contents;
 
 namespace Take.Party
 {
@@ -26,7 +27,7 @@ namespace Take.Party
         {
             //EXEMPLO ESTA AQUI http://johnnycrazy.github.io/SpotifyAPI-NET/SpotifyWebAPI/auth/
             //var _spotify = await GetToken(); //ESSA LINHA É SO PARA PEGAR O TOKEN. DEPOIS DISSO PODE SER COMENTADA
-
+            //StateManager.Instance.SetState(message.From, Bot.Settings.States.WaitingTaskTime);
             using (var _spotify = new SpotifyWebAPI
             {
                 AccessToken = "BQCpkZHiFLRt7C2pkNjpTx3fGLwKvh2-UU-ynU09AP-qKpNipq3j0P6ln1_UvzJPRWoe2VVAe6ipayBUhONj4-BaHxtewb7qSuOf8l1I8CrZkBr5YOWBMAAq0mUdFHTDBZoGlc9vsaJzcPwkDzulVGDH8-BPlKEEejGemYUkcrniOwlV6F33nS5C_1ugHk_pF5I6NHL_XPhIdg_tGdk_e4TogExzocKNs_i-6HlMXrZNGh88yRsPC6hIQq0sT2UKOkoBBwBB9FW_fHU4OEQw_akCABv0Dn18L_w",
@@ -37,11 +38,51 @@ namespace Take.Party
                 var tracks = "Não achou";
                 if (item.Tracks != null)
                 {
-                    tracks = string.Join("\n", item.Tracks?.Items.Select(i => i.Name));
+                    tracks = string.Join("\n", item.Tracks?.Items.Select(i => $"{i.Name} {i.Artists.First().Name}" ));
+                    await ShowMediaLinkOptionsAsync(message.From, cancellationToken, item.Tracks?.Items.Select(i => $"{i.Name} {i.Artists.First().Name}").ToArray());
                 }
                 Console.WriteLine($"From: {message.From} \tContent: {message.Content}");
-                await _sender.SendMessageAsync(tracks, message.From, cancellationToken);
+                //await _sender.SendMessageAsync(tracks, message.From, cancellationToken);
             }
+        }
+
+        private async Task ShowMediaLinkOptionsAsync(Node from, CancellationToken cancellationToken, string[] songs)
+        {
+            var select = new Select
+            {
+                Text = "Escolha o tipo de MediaLink que deseja receber:"
+            };
+
+            var selectOptions = new SelectOption[10];
+            //var optionsLabel = new string[] {
+            //    "Imagem",
+            //    "Imagem - Media Bucket",
+            //    "Imagem - Sem preview",
+            //    "Imagem - Tipo preview inválido",
+            //    "Imagem - Url inválida",
+            //    "Imagem - Tamanho e Tipo inválido",
+            //    "Audio",
+            //    "Audio - Media Bucket",
+            //    "Video",
+            //    "Video - Media Bucket"
+            //};
+                       
+
+            for (int i = 0; i < selectOptions.Length; i++)
+            {
+
+                selectOptions[i] = new SelectOption
+                {
+                    Text = songs[i],
+                    Order = i + 1,
+                    Value = new PlainText { Text = songs[i] }
+                };
+
+            }
+
+            select.Options = selectOptions;
+
+            await _sender.SendMessageAsync(select, from, cancellationToken);
         }
 
         private async Task<SpotifyWebAPI> GetToken()
