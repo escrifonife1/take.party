@@ -3,10 +3,14 @@
   "accessKey": "a3lHQno2elQxaW5qZjFhcEx0bDg=",
   "messageReceivers": [
     {
-      "type": "PlainTextMessageReceiver",
+      "type": "SearchTrackReceiver",
       "mediaType": "text/plain",
       "state": "default"
     }
+    //{
+    //  "type": "AddTrackToListReceiver",
+    //  "mediaType": "text/plain"
+    //}
   ],
   "settings": {
     "setting1": "value1"
