@@ -6,13 +6,31 @@
       "type": "StartReceiver",
       "mediaType": "text/plain",
       "state": "default",
-      "outstate": "Search"
+      "outstate": "select-type"
     },
     {
       "type": "TrackReceiver",
       "mediaType": "text/plain",
-      "state": "Search",
-      "content":  "0"
+      "state": "select-type",
+      "content": "0"
+    },
+    {
+      "type": "AlbumReceiver",
+      "mediaType": "text/plain",
+      "state": "select-type",
+      "content": "1",
+      "outstate": "select-album"
+    },
+    {
+      "type": "SelectAlbumReceiver",
+      "mediaType": "text/plain",
+      "state": "select-album"
+    },
+    {
+      "type": "ArtistReceiver",
+      "mediaType": "text/plain",
+      "state": "select-type",
+      "content": "2"
     },
     {
       "type": "AddTrackToListReceiver",

@@ -77,10 +77,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Receivers\SelectAlbumReceiver.cs" />
+    <Compile Include="Receivers\AlbumReceiver.cs" />
+    <Compile Include="Receivers\ArtistReceiver.cs" />
     <Compile Include="Receivers\AddTrackToListReceiver.cs" />
     <Compile Include="Receivers\BaseReceiver.cs" />
     <Compile Include="Receivers\AudioSearchTrackReceiver.cs" />
-    <Compile Include="Receivers\SearchReceiver.cs" />
     <Compile Include="Receivers\StartReceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receivers\TrackReceiver.cs" />

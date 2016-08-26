@@ -23,7 +23,6 @@ namespace Take.Party
         public AudioSearchTrackReceiver(IMessagingHubSender sender)
         {
             _sender = sender;
-            _spotify = GetSpotify();
         }
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)

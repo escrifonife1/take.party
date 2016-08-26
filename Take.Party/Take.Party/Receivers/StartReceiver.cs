@@ -20,13 +20,10 @@ namespace Take.Party
     public class StartReceiver : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
-        private SpotifyWebAPI _spotify;
-        
 
         public StartReceiver(IMessagingHubSender sender)
         {
             _sender = sender;
-            _spotify = GetSpotify();
         }
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)

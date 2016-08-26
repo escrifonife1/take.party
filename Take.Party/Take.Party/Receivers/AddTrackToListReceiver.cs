@@ -18,12 +18,10 @@ namespace Take.Party
     {
         private PrivateProfile _profile;
         private readonly IMessagingHubSender _sender;
-        private SpotifyWebAPI _spotify;
 
         public AddTrackToListReceiver(IMessagingHubSender sender)
         {
             _sender = sender;
-            _spotify = GetSpotify();
             _profile = _spotify.GetPrivateProfile();
         }
 

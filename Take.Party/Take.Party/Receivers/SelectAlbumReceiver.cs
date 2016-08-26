@@ -5,44 +5,48 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Lime.Protocol;
+using Take.Party.Receivers;
 using Takenet.MessagingHub.Client.Listener;
 using Takenet.MessagingHub.Client.Sender;
 using SpotifyAPI.Web.Models;
 using Lime.Messaging.Contents;
 using Takenet.MessagingHub.Client;
 
-namespace Take.Party.Receivers
+namespace Take.Party
 {
-    public class TrackReceiver : BaseReceiver, IMessageReceiver
+    public class SelectAlbumReceiver : BaseReceiver, IMessageReceiver
     {
-        private IMessagingHubSender _sender;
+        private readonly IMessagingHubSender _sender;
 
-        public TrackReceiver(IMessagingHubSender sender)
+        public SelectAlbumReceiver(IMessagingHubSender sender)
         {
-            _sender = sender;
-            
-
+            this._sender = sender;
         }
+
         public async Task ReceiveAsync(Message envelope, CancellationToken cancellationToken = default(CancellationToken))
         {
             var item = Cache.Get(envelope.From.ToString()) as SearchItem;
 
+            var id = envelope.Content.ToString().Split(' ')[1];
+
+            var tracks = await _spotify.GetAlbumTracksAsync(id);
+
             var select = new Select
             {
-                Text = "Escolha a música que deseja adicionar à playlist:"
+                Text = "Escolha o album:"
             };
 
             var selectOptions = new List<SelectOption>();
 
-            var count = item.Tracks.Items.Count > 5 ? 5 : item.Tracks.Items.Count;
+            var count = tracks.Items.Count > 5 ? 5 : tracks.Items.Count;
 
             for (int i = 0; i < count; i++)
             {
-                selectOptions.Add( new SelectOption
+                selectOptions.Add(new SelectOption
                 {
-                    Text = $"{item.Tracks.Items[i].Name} {item.Tracks.Items[i].Artists.First().Name}",
+                    Text = $"{tracks.Items[i].Name} {tracks.Items[i].Artists.First().Name}",
                     Order = i + 1,
-                    Value = new PlainText { Text = item.Tracks.Items[i].Uri }
+                    Value = new PlainText { Text = $"track {tracks.Items[i].Id}" }
                 });
             }
 
@@ -50,6 +54,5 @@ namespace Take.Party.Receivers
 
             await _sender.SendMessageAsync(select, envelope.From, cancellationToken);
         }
-        
     }
 }
