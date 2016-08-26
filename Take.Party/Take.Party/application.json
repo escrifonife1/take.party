@@ -3,9 +3,16 @@
   "accessKey": "a3lHQno2elQxaW5qZjFhcEx0bDg=",
   "messageReceivers": [
     {
-      "type": "SearchTrackReceiver",
+      "type": "StartReceiver",
       "mediaType": "text/plain",
-      "state": "default"
+      "state": "default",
+      "outstate": "Search"
+    },
+    {
+      "type": "TrackReceiver",
+      "mediaType": "text/plain",
+      "state": "Search",
+      "content":  "0"
     },
     {
       "type": "AddTrackToListReceiver",

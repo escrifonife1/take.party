@@ -15,12 +15,12 @@ using Take.Party.Receivers;
 
 namespace Take.Party
 {
-    public class SearchTrackReceiver : BaseReceiver, IMessageReceiver
+    public class AudioSearchTrackReceiver : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
         private SpotifyWebAPI _spotify;
 
-        public SearchTrackReceiver(IMessagingHubSender sender)
+        public AudioSearchTrackReceiver(IMessagingHubSender sender)
         {
             _sender = sender;
             _spotify = GetSpotify();
@@ -30,10 +30,14 @@ namespace Take.Party
         {
             try
             {
+                var audio = message.Content as MediaLink;
+
+
+                
                 //EXEMPLO ESTA AQUI http://johnnycrazy.github.io/SpotifyAPI-NET/SpotifyWebAPI/auth/
                 //var _spotify = await GetToken(); //ESSA LINHA É SO PARA PEGAR O TOKEN. DEPOIS DISSO PODE SER COMENTADA
-             
-                var item = _spotify.SearchItems(message.Content.ToString(), SearchType.Track);
+
+                var item = _spotify.SearchItems(message.Content.ToString(), SearchType.Track | SearchType.Artist | SearchType.Album);
                 var tracks = "Não achou";
                 if (item.Tracks != null)
                 {

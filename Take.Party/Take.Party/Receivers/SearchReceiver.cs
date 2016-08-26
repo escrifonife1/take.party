@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Take.Party
+namespace Take.Party.Receivers
 {
-    public class Class1
+    class SearchReceiver
     {
     }
 }
