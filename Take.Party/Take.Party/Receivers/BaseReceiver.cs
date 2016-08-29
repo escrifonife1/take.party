@@ -22,11 +22,15 @@ namespace Take.Party.Receivers
                 AccessToken = settings.AccessToken,
                 TokenType = "Bearer"
             };
+            RefreshToken(settings);
+        }
 
+        protected void RefreshToken(Settings settings)
+        {
             var profile = _spotify.GetPrivateProfile();
 
             if (profile.Error != null)
-            {
+            {                
                 var auth = new SpotifyAPI.Web.Auth.AutorizationCodeAuth()
                 {
                     ClientId = settings.ClientId,

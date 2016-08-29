@@ -29,6 +29,7 @@ namespace Take.Party
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)
         {
+            RefreshToken(_settings);
             if (message.Content.ToString() == "/start")
             {
                 await _sender.SendMessageAsync(new PlainText
